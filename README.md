@@ -8,13 +8,8 @@ This is a file upload web application
     git clone https://github.com/skstanwar/Image-upload-project.git
     ```
 
-2. Navigate to the project directory:
 
-    ```bash
-    cd project-directory
-    ```
-
-3. Install dependencies using npm:
+2. Install dependencies using npm:
 
     ```bash
     npm install
