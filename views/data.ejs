@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+	<link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Display username and email -->
+        <h2>User Profile</h2>
+        <p>Welcome, <%= name %> (<%= email %>)</p>
+        
+        <!-- File upload form -->
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="image">Select an image:</label><br>
+            <input type="file" id="image" name="image"><br><br>
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+</body>
+</html>
