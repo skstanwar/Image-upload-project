@@ -33,3 +33,11 @@ To start the server, run the following command:
 
 ```bash
 npm start
+```
+open localhost:3000 and then first register and then login 
+upload any image 
+the upladed file will be save in follow folder
+```
+/routes/upload
+```
+
