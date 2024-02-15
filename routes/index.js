@@ -118,21 +118,23 @@ router.post('/upload', (req, res) => {
 	
     // Move the uploaded image to our upload folder
 	var image_id=makeid(4);
-    image.mv(__dirname + '/upload/' +image_id+image.name);
-	console.log("image uploaded"+__dirname + '/upload/' + image_id+image.name);
-
-    res.send({"Link":"http://localhost:3000/download/"+image_id+image.name});
+	const link = req.get('origin')+"/download/"+image_id+image.name.replace(/\s/g, '');
+    image.mv(__dirname + '/upload/' +image_id+image.name.replace(/\s/g, ''));
+	console.log("image uploaded: "+image_id+image.name.replace(/\s/g, ''));
+	res.send(`<h1>Share This Link With Your Friends!<br>
+			<a href=${link}>${link}</a></h1>`);
 });
 router.get('/download/:name', async(req, res) => {
+	console.log("Req for :" + req.params.name);
    res.download(path.join(__dirname, '/upload/')+ req.params.name);
    setTimeout(function() {
 	try {
 		fs.unlinkSync(path.join(__dirname,'/upload/')+req.params.name);
-		console.log('File is deleted.');
+		console.log('File is deleted:'+req.params.name);
 	  } catch (err) {
-		console.error("File Not Founded !");
+		// console.error("File Not Founded !");
 	  }
-	console.log("time out")
+	// console.log("time out")
 }, 60000);
 	
 });
