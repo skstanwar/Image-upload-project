@@ -1,10 +1,22 @@
 var express = require('express');
 var router = express.Router();
+var path = require('path');
 const fileUpload = require('express-fileupload');
+const fs = require('fs');
 
 var User = require('../models/user');
 router.use(fileUpload());
-
+function makeid(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
 router.get('/', function (req, res, next) {
 	return res.render('index.ejs');
 });
@@ -100,16 +112,30 @@ router.get('/profile', function (req, res, next) {
 router.post('/upload', (req, res) => {
     // Log the files to the console
 	const { image } = req.files;
-
+	
     // If no image submitted, exit
     if (!image) return res.sendStatus(400);
-
+	
     // Move the uploaded image to our upload folder
-    image.mv(__dirname + '/upload/' + image.name);
+	var image_id=makeid(4);
+    image.mv(__dirname + '/upload/' +image_id+image.name);
+	console.log("image uploaded"+__dirname + '/upload/' + image_id+image.name);
 
-    res.sendStatus(200);
+    res.send({"Link":"http://localhost:3000/download/"+image_id+image.name});
 });
-
+router.get('/download/:name', async(req, res) => {
+   res.download(path.join(__dirname, '/upload/')+ req.params.name);
+   setTimeout(function() {
+	try {
+		fs.unlinkSync(path.join(__dirname,'/upload/')+req.params.name);
+		console.log('File is deleted.');
+	  } catch (err) {
+		console.error("File Not Founded !");
+	  }
+	console.log("time out")
+}, 60000);
+	
+});
 router.get('/logout', function (req, res, next) {
 	console.log("logout")
 	if (req.session) {
